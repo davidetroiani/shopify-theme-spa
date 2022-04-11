@@ -1,0 +1,23 @@
+<!--render this section only when the user has logged in-->
+{%- if customer -%}
+
+  <!--you can move the <script> tag in the header section because you will use the same variables in all your React apps in this Shopify theme-->
+  <script>
+    //store in globally accessable variables the values you will send to your Node app's API as headers 
+    window.__cid = {{customer.id}};
+    
+    //make your own algorithm by using a secret key
+    //i used a static string but you can store it in the settings file
+    //you can access other customer properties and get them in your server logic by querying Shopify Customer API by customer.id
+    //for example here i may use the customer.email property without exposing this variable to the client
+    //i will use the customerer id in my Node app to query Shopify Customer API and verify the hash
+    window.__ch = "{{customer.id | append: 'customer.email' | base64_encode | hmac_sha256: 'xyzqwerty' }}";
+  </script>
+
+  <!--this is the entry to your React app-->
+  <div id="root"></div>
+
+  <!--load your React app javascript file-->
+  <script defer="defer" src="http://localhost:3001/static/js/main.d3e02576.js"></script>
+  
+{%- endif -%}
